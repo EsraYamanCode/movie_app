@@ -5,8 +5,7 @@ import {Client, Databases, ID, Query} from "react-native-appwrite";
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const TABLE_ID= process.env.EXPO_PUBLIC_APPWRITE_TABLE_ID!;
 
-console.log(DATABASE_ID, TABLE_ID);
-
+//console.log(DATABASE_ID, TABLE_ID);
 const client = new Client()
 client
     .setEndpoint('https://nyc.cloud.appwrite.io/v1')
@@ -50,3 +49,18 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
         //create a new document in Appwrite database -> 1
 }
 
+export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> => {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, TABLE_ID, [
+            Query.limit(5),
+            Query.orderDesc('count'),
+        ])
+
+        return result.documents as unknown as TrendingMovie[];
+
+    } catch (error) {
+        console.log(error);
+        return undefined;
+    }
+
+}
