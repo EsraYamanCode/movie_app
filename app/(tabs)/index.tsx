@@ -58,7 +58,6 @@ export default function Index() {
                                 <Text className="text-lg text-white font-bold mb-3">Trending Movies</Text>
                             </View>
                         )}
-
                         <>
                             <FlatList
                                 horizontal

@@ -83,7 +83,7 @@ const Search = () => {
                         {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
                             <Text>
                                 Search Results for {''}
-                                <Text className="text-accent">searchQuery</Text>
+                                <Text className="text-accent">{searchQuery}</Text>
                             </Text>
                         )}
                     </>

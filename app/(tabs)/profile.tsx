@@ -6,33 +6,23 @@ import { icons } from '@/constants/icons'; // İkonların
 import { images } from '@/constants/images'; // Arka plan resmin
 
 const Profile = () => {
-    // Context'ten fonksiyonları çekiyoruz
     const { currentUser, loginUser, logoutUser, registerUser } = useSavedMovies();
-
-    // Hangi ekrandayız? (true = Giriş Yap, false = Kayıt Ol)
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-
-    // Form verileri
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    // Butona basınca çalışacak fonksiyon
     const handleSubmit = async () => {
-        // 1. Boş alan kontrolü
         if (!email || !password) {
             Alert.alert("Hata", "Lütfen tüm alanları doldurun.");
             return;
         }
-
         try {
             if (isLoginMode) {
-                // --- GİRİŞ YAP ---
                 await loginUser(email, password);
                 Alert.alert("Başarılı", "Giriş yapıldı!");
             } else {
-                // --- KAYIT OL ---
                 await registerUser(email, password, username);
                 Alert.alert("Başarılı", "Hesap oluşturuldu ve giriş yapıldı!");
             }
@@ -43,8 +33,6 @@ const Profile = () => {
             setIsLoading(false);
         }
     };
-
-    // Çıkış yapma fonksiyonu
     const handleLogout = async () => {
         await logoutUser();
         setEmail("");
@@ -54,7 +42,6 @@ const Profile = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-primary">
-            {/* Arka Plan Görseli */}
             <Image
                 source={images.bg}
                 className="absolute top-0 w-full h-full opacity-50"
@@ -64,10 +51,7 @@ const Profile = () => {
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 24 }}>
 
                 {currentUser ? (
-                    // ==========================================
-                    // DURUM 1: KULLANICI ZATEN GİRİŞ YAPMIŞSA
-                    // ==========================================
-                    <View className="items-center w-full">
+                      <View className="items-center w-full">
                         <View className="w-24 h-24 bg-white/10 rounded-full justify-center items-center mb-6 border border-secondary">
                             <Image source={icons.person} className="w-12 h-12" tintColor="#FF9C01"/>
                         </View>
@@ -84,9 +68,6 @@ const Profile = () => {
                     </View>
 
                 ) : (
-                    // ==========================================
-                    // DURUM 2: GİRİŞ VEYA KAYIT EKRANI
-                    // ==========================================
                     <View>
                         <Image source={icons.logo} className="w-20 h-20 mx-auto mb-6" resizeMode="contain"/>
 
@@ -94,7 +75,6 @@ const Profile = () => {
                             {isLoginMode ? "Giriş Yap" : "Kayıt Ol"}
                         </Text>
 
-                        {/* Sadece Kayıt Modundaysa İsim Sor */}
                         {!isLoginMode && (
                             <View className="mb-4">
                                 <Text className="text-gray-300 mb-2 ml-1">Kullanıcı Adı</Text>
@@ -147,7 +127,6 @@ const Profile = () => {
                             )}
                         </TouchableOpacity>
 
-                        {/* Mod Değiştirme Linki */}
                         <View className="flex-row justify-center gap-x-1">
                             <Text className="text-gray-400">
                                 {isLoginMode ? "Hesabın yok mu?" : "Zaten hesabın var mı?"}
