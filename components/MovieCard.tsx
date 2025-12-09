@@ -7,12 +7,14 @@ const MovieCard = ({id, poster_path, title, vote_average, release_date}: Movie) 
     //console.log(poster_path);
 
     return (
-        <Link href={`/movie/${id}`} asChild>
+        <Link href={`/movies/${id}`} asChild>
             <TouchableOpacity className="w-[30%]">
                 <Image
                     source={{
                         uri: poster_path
-                            ? `https://image.tmdb.org/t/p/w500${poster_path}`
+                            ? (poster_path.startsWith('http')
+                                ? poster_path // Saved sayfasından geliyorsa (Tam link)
+                                : `https://image.tmdb.org/t/p/w500${poster_path}`) // Ana sayfadan geliyorsa (Yarım link)
                             : 'https://placehold.co/600x400/1a1a1a/ffffff.png'
                     }}
                     className="w-full h-52 rounded-lg"

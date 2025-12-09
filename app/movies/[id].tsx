@@ -21,10 +21,9 @@ const MovieInfo = ({label, value}: MovieInfoProps) => (
 
 const MovieDetails = () => {
     const {id} = useLocalSearchParams();
-    const {data: movie, loading} = useFetch(()=> fetchMovieDetails(id as string));
-
+    const {data: movie} = useFetch(()=> fetchMovieDetails(id as string));
     const { savedMovies, toggleSaved } = useSavedMovies();
-    const isSaved = savedMovies.some((m: any) => m.id.toString() === id);
+    const isSaved = savedMovies.some((m: any) => String(m.movieId) === String(movie?.id));
     const handleSavePress = () => {
         if (movie) {
             toggleSaved(movie);

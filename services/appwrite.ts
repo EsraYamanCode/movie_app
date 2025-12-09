@@ -86,8 +86,8 @@ export const getSavedMovies = async (userId: string) => {
 export const saveMovieToDB = async (userId: string, movie: Movie) => {
     try {
         const payload = {
-            userId: userId,
-            movieId: movie.id,
+            userId: String(userId),
+            movieId: String(movie.id),
             title: movie.title,
             posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         };
@@ -120,3 +120,45 @@ export const deleteSavedMovieFromDB = async (documentId: string) => {
         throw error;
     }
 };
+
+// lib/appwrite.ts
+
+export const createUser = async (email: string, password: string, username: string) => {
+    try {
+        // 1. Kullanıcıyı oluştur
+        const newAccount = await account.create(
+            ID.unique(),
+            email,
+            password,
+            username
+        );
+
+        if (!newAccount) throw Error;
+
+        // 2. HEMEN ARDINDAN OTOMATİK GİRİŞ YAP (Bu kısım eksik olabilir)
+        // Kullanıcı oluştuğu an oturum da açıyoruz ki sayfayı yenilemeye gerek kalmasın.
+        await signIn(email, password);
+
+        return newAccount;
+    } catch (error) {
+        console.log("Kayıt hatası:", error);
+        throw error;
+    }
+}
+
+// signIn fonksiyonun zaten vardır ama emin olmak için kontrol et:
+export const signIn = async (email: string, password: string) => {
+    try {
+        // Varsa eski oturumu sil (Güvenlik için)
+        await account.deleteSession('current').catch(() => {});
+
+        const session = await account.createEmailPasswordSession(email, password);
+        return session;
+    } catch (error) {
+        console.log("Appwrite Giriş Hatası:", error);
+        throw error;
+    }
+}
+
+export class signOut {
+}
