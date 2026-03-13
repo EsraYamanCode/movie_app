@@ -4,7 +4,7 @@ import {router, useLocalSearchParams} from "expo-router";
 import {fetchMovieDetails} from "@/services/api";
 import useFetch from "@/services/useFetch";
 import {icons} from "@/constants/icons";
-import {useSavedMovies} from "@/context/SavedMoviesContext";
+
 
 interface MovieInfoProps {
     label: string;
@@ -22,13 +22,7 @@ const MovieInfo = ({label, value}: MovieInfoProps) => (
 const MovieDetails = () => {
     const {id} = useLocalSearchParams();
     const {data: movie} = useFetch(()=> fetchMovieDetails(id as string));
-    const { savedMovies, toggleSaved } = useSavedMovies();
-    const isSaved = savedMovies.some((m: any) => String(m.movieId) === String(movie?.id));
-    const handleSavePress = () => {
-        if (movie) {
-            toggleSaved(movie);
-        }
-    };
+   
     return (
         <View className="bg-primary flex-1">
             <ScrollView contentContainerStyle={{paddingBottom: 80}}>
@@ -37,20 +31,16 @@ const MovieDetails = () => {
                            className="w-full h-[550px]"
                            resizeMode="stretch"
                     />
+                    {/* Save Button
+                    <TouchableOpacity
+                        onPress={() => console.log("Save pressed")}
+                        className="absolute bottom-3 right-3 bg-primary px-4 py-2 rounded-full"
+                    >
+                        <Image source={icons.save} className="w-4 h-4 mr-1" />
+                    </TouchableOpacity> */}
                 </View>
 
-                <TouchableOpacity
-                    onPress={handleSavePress}
-                    activeOpacity={0.7}
-                    // absolute ile sağ üst köşeye sabitliyoruz (top-10 status bar payı için)
-                    className="absolute top-12 right-6 z-50 p-3 bg-black/50 rounded-full justify-center items-center"
-                >
-                    <Image
-                        source={icons.save}
-                        className="size-6" // İkon boyutu
-                        tintColor={isSaved ? "#FFD700" : "white"} // Kayıtlıysa SARI, değilse BEYAZ
-                    />
-                </TouchableOpacity>
+                
                 <View className="flex-col items-start justify-center mt-5 px-5">
                     <Text className=" text-white font-bold text-xl">{movie?.title}</Text>
                     <View className="flex-row items-center gap-x-1 mt-2">

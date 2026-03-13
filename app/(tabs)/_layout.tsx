@@ -3,7 +3,7 @@ import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 import { SafeAreaViewBase, ImageBackground, Image, Text, View } from "react-native";
 
-const TabIcon = ({focused,icon, title}: any) => {
+const TabIcon = ({focused, icon, title}: any) => {
     if (focused) {
         return (
             <ImageBackground
