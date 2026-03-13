@@ -1,10 +1,10 @@
 import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {router, useLocalSearchParams} from "expo-router";
 import {fetchMovieDetails} from "@/services/api";
 import useFetch from "@/services/useFetch";
 import {icons} from "@/constants/icons";
-
+import { saveMovie } from "@/services/appwrite";
 
 interface MovieInfoProps {
     label: string;
@@ -22,7 +22,17 @@ const MovieInfo = ({label, value}: MovieInfoProps) => (
 const MovieDetails = () => {
     const {id} = useLocalSearchParams();
     const {data: movie} = useFetch(()=> fetchMovieDetails(id as string));
-   
+    const [saved, setSaved] = useState(false);
+    const handleSave = async () => {
+    if (!movie) return;
+
+    console.log("Save button pressed");
+    console.log(movie);
+
+    await saveMovie(movie);
+    setSaved(true);
+};
+
     return (
         <View className="bg-primary flex-1">
             <ScrollView contentContainerStyle={{paddingBottom: 80}}>
@@ -31,13 +41,19 @@ const MovieDetails = () => {
                            className="w-full h-[550px]"
                            resizeMode="stretch"
                     />
-                    {/* Save Button
+                    {/* Save Button */}
                     <TouchableOpacity
-                        onPress={() => console.log("Save pressed")}
-                        className="absolute bottom-3 right-3 bg-primary px-4 py-2 rounded-full"
+                        onPress={handleSave}
+                        className={`absolute bottom-4 right-4 p-3 rounded-full ${
+                            saved ? "bg-red-500" : "bg-black/60"
+                        }`}
                     >
-                        <Image source={icons.save} className="w-4 h-4 mr-1" />
-                    </TouchableOpacity> */}
+                        <Image
+                            source={icons.save}
+                            className="w-5 h-5"
+                            tintColor="#fff"
+                        />
+                    </TouchableOpacity>
                 </View>
 
                 

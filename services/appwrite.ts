@@ -2,6 +2,7 @@ import {Client, Databases, ID, Query, Account} from "react-native-appwrite";
 
 const DATABASE_ID = "69296a54002ef8af61ef";
 const COLLECTION_ID = "69296adb00196f203e09";
+export const SAVED_MOVIES_COLLECTION_ID = "smovies";
 //const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 //const COLLECTION_ID= process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
@@ -66,3 +67,23 @@ export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> 
 
 }
 
+export const saveMovie = async (movie: any) => {
+  try {
+    await database.createDocument(
+      DATABASE_ID,
+      SAVED_MOVIES_COLLECTION_ID,
+      ID.unique(),
+      {
+        movie_id: movie.id,
+        title: movie.title,
+        poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+        vote_average: movie.vote_average,
+        release_date: movie.release_date,
+      }
+    );
+
+    console.log("Film kaydedildi");
+  } catch (error) {
+    console.log("Film kaydedilemedi", error);
+  }
+};
