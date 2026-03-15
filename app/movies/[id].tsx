@@ -1,10 +1,10 @@
 import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {router, useLocalSearchParams} from "expo-router";
 import {fetchMovieDetails} from "@/services/api";
 import useFetch from "@/services/useFetch";
 import {icons} from "@/constants/icons";
-import { saveMovie } from "@/services/appwrite";
+import { checkSavedMovie, saveMovie, deleteSavedMovie, getCurrentUser } from "@/services/appwrite";
 
 interface MovieInfoProps {
     label: string;
@@ -22,16 +22,45 @@ const MovieInfo = ({label, value}: MovieInfoProps) => (
 const MovieDetails = () => {
     const {id} = useLocalSearchParams();
     const {data: movie} = useFetch(()=> fetchMovieDetails(id as string));
-    const [saved, setSaved] = useState(false);
+    const [saved, setSaved] = useState<any>(null);
+    const [docId, setDocId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const checkMovie = async () => {
+            if (!movie) return;
+
+            const user = await getCurrentUser();
+            if (!user) return;
+
+            const result = await checkSavedMovie(movie.id, user.$id);
+
+            if (result.length > 0) {
+                setSaved(true);
+                setDocId(result[0].$id);
+            }else {
+                setSaved(false);
+                setDocId(null);
+            }
+        };
+        checkMovie();
+    }, [movie]);
+
     const handleSave = async () => {
-    if (!movie) return;
-
-    console.log("Save button pressed");
-    console.log(movie);
-
-    await saveMovie(movie);
-    setSaved(true);
-};
+        const user = await getCurrentUser();
+        if (!user) {
+            router.push("/login");
+        return;
+        }
+        if (saved && docId) {
+            await deleteSavedMovie(docId);
+            setSaved(false);
+            setDocId(null);
+        } else {
+            const newMovie =await saveMovie(movie, user.$id);
+            setSaved(true);
+            setDocId(newMovie.$id);
+        }
+    };
 
     return (
         <View className="bg-primary flex-1">

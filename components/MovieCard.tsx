@@ -3,10 +3,21 @@ import React from "react";
 import {Link} from "expo-router";
 import {icons} from "@/constants/icons";
 
-const MovieCard = ({id, poster_path, title, vote_average, release_date}: Movie) => {
+interface MovieCardProps {
+    id?: number;
+    movie_id?: number;
+    poster_path?: string;
+    poster_url?: string;
+    title: string;
+    vote_average: number;
+    release_date?: string;
+    onPress?: () => void; // <-- ekledik
+}
+
+const MovieCard = ({id, movie_id, poster_path, poster_url, title, vote_average, release_date, onPress}: MovieCardProps) => {
     return (
-        <Link href={`/movies/${id}`} asChild>
-            <TouchableOpacity className="w-[30%]">
+        <Link href={`/movies/${movie_id || id}`} asChild>
+            <TouchableOpacity className="w-[30%]" onPress={onPress}>
                 <Image
                     source={{
                         uri: poster_path
