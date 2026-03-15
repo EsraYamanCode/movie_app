@@ -48,9 +48,43 @@ const Profile = () => {
                 <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
                 {user ? (
                     <>
-                        <Text className="text-white text-xl mb-2">{user.name || "No Name"}</Text>
-                        <Text className="text-white">{user.email}</Text>
-                        <Text className="text-white">Saved Movies: {savedCount}</Text>
+                        <View className="mt-10 px-6">
+
+                            <View className="bg-white rounded-2xl p-6 shadow-lg">
+
+                                <View className="flex-row items-center mb-4">
+                                    <Image source={icons.person} className="w-5 h-5 mr-3"/>
+                                    <View>
+                                        <Text className="text-gray-500 text-xs">Name</Text>
+                                        <Text className="text-black font-semibold text-base">
+                                            {user.name || "No Name"}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                                <View className="flex-row items-center mb-4">
+                                    <Image source={icons.mail} className="w-5 h-5 mr-3"/>
+                                    <View>
+                                        <Text className="text-gray-500 text-xs">Email</Text>
+                                        <Text className="text-black font-semibold text-base">
+                                            {user.email}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                                <View className="flex-row items-center">
+                                    <Image source={icons.save} className="w-5 h-5 mr-3"/>
+                                    <View>
+                                        <Text className="text-gray-500 text-xs">Saved Movies</Text>
+                                        <Text className="text-black font-semibold text-base">
+                                            {savedCount}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                            </View>
+
+                        </View>
                         <TouchableOpacity
                             onPress={handleLogout}
                             className="bg-red-500 p-3 rounded mt-6"
