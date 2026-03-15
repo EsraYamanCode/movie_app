@@ -84,13 +84,18 @@ const Profile = () => {
 
                             </View>
 
+                            <View >
+                                <TouchableOpacity
+                                    onPress={handleLogout}
+                                    className="bg-red-500 p-3 rounded mt-6"
+                                    >
+                                        <Text className="text-white text-center font-bold">Logout</Text>
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
-                        <TouchableOpacity
-                            onPress={handleLogout}
-                            className="bg-red-500 p-3 rounded mt-6"
-                            >
-                                <Text className="text-white text-center font-bold">Logout</Text>
-                        </TouchableOpacity>
+                        
+                        
                     </>
                 ) : (
                     <Text className="text-white mt-4 text-center">You are not logged in</Text>
